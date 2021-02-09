@@ -127,9 +127,17 @@ func (u *User) UpdateAUser(db *gorm.DB, uid uint32) (*User, error) {
 	if db.Error != nil {
 		return &User{}, db.Error
 	}
-	err=db.Debug().Model(&User{}).Where("id=?",uid).Take(&u).Error
-	if err !=nil{
+	err = db.Debug().Model(&User{}).Where("id=?", uid).Take(&u).Error
+	if err != nil {
 		return &User{}, err
 	}
-	return &User{}, err
+	return u, nil
+}
+
+func (u *User) DeleteAUser(db *gorm.DB, uid uint32) (int64, error) {
+	db = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&User{}).Delete(&User{})
+	if db.Error != nil {
+		return 0, db.Error
+	}
+	return db.RowsAffected, nil
 }
