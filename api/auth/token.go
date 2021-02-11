@@ -1,4 +1,5 @@
 package auth
+
 import (
 	"encoding/json"
 	"fmt"
@@ -11,12 +12,13 @@ import (
 
 	jwt "github.com/dgrijalva/jwt-go"
 )
-func  CreateToken(user_id uint32)(string,error){
-	claims :=jwt.MapClaims{}
-	claims["authorized"]=true
-	claims["user_id"]=user_id
-	claims["exp"]=time.Now().Add(time.Hour*1).Unix()
-	token:=jwt.NewWithClaims(jwt.SigningMethodES256,claims)
+
+func CreateToken(user_id uint32) (string, error) {
+	claims := jwt.MapClaims{}
+	claims["authorized"] = true
+	claims["user_id"] = user_id
+	claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
+	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
 	return token.SignedString([]byte(os.Getenv("API_SECRET")))
 }
 
@@ -81,3 +83,4 @@ func Pretty(data interface{}) {
 	}
 
 	fmt.Println(string(b))
+}
